@@ -1,0 +1,47 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>${pageTitle} - Quản lý kho</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style4.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand"><span class="icon"><img src="${pageContext.request.contextPath}/assets/images/qlkho.png"></span><span>QUẢN LÝ KHO</span></div>
+    <nav>
+      <a href="${pageContext.request.contextPath}/dashboard" class="${active=='dashboard'?'on':''}">🏠 Tổng quan</a>
+      <a href="${pageContext.request.contextPath}/admin/receipts" class="${active=='receipts'?'on':''}">📥 Nhập kho</a>
+      <a href="${pageContext.request.contextPath}/admin/issues" class="${active=='issues'?'on':''}">📤 Xuất kho</a>
+      <a href="${pageContext.request.contextPath}/admin/categories" class="${active=='categories'?'on':''}">🗂️ Danh mục</a>
+      <a href="${pageContext.request.contextPath}/admin/products" class="${active=='products'?'on':''}">📋 Sản phẩm</a>
+      <a href="${pageContext.request.contextPath}/admin/reports" class="${active=='reports'?'on':''}">📊 Báo cáo</a>
+      <c:if test="${currentUser.admin}">
+        <a href="${pageContext.request.contextPath}/admin/users" class="${active=='users'?'on':''}">👥 Nhân viên</a>
+      </c:if>
+      <a href="${pageContext.request.contextPath}/account" class="${active=='account'?'on':''}">⚙️ Tài khoản</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="me">${currentUser.fullName}</div>
+      <a class="logout" href="${pageContext.request.contextPath}/logout">⎋ Đăng xuất</a>
+    </div>
+  </aside>
+  <main class="content">
+    <c:set var="displayName" value="${empty currentUser.fullName ? currentUser.username : currentUser.fullName}"/>
+    <div class="topbar">
+      <div class="page-title">${pageTitle}</div>
+      <a href="${pageContext.request.contextPath}/account">
+      <div class="user-chip">
+        <div class="avatar">
+		    <img src="${pageContext.request.contextPath}/assets/images/${currentUser.role.roleId == 1 ? 'manager.png' : 'warehouse.png'}" alt="Avatar">
+		</div>
+        <div class="who"><b>${displayName}</b><span>${currentUser.role.roleName}</span></div>
+      </div>
+      </a>
+    </div>
+    <c:if test="${not empty flashSuccess}"><div class="alert ok">✓ ${flashSuccess}</div></c:if>
+    <c:if test="${not empty flashError}"><div class="alert err">✕ ${flashError}</div></c:if>

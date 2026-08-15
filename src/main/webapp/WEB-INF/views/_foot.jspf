@@ -1,0 +1,63 @@
+  </main>
+</div>
+<c:if test="${wsChannels ne null}">
+<script>
+/* Realtime helper — subscribes to WebSocket channels so open pages update
+   without an F5. Enabled per page by setting the var wsChannels to "broadcast"
+   (or a per-order channel) before this fragment is included.
+   Server events: approved (order status), refresh/created/users/catalog (data changed).
+
+   Two modes:
+   - Default: any relevant event triggers location.reload().
+   - AJAX: a page that defines window.wsOnUpdate(data) BEFORE this fragment
+     (e.g. the report page) gets the event via that callback instead — the
+     socket stays open and reconnects automatically, no page reload. */
+(function () {
+  var ctx = '${pageContext.request.contextPath}';
+  var channels = '${wsChannels}'.split(',').filter(function (s) { return s; });
+  var proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  var url = proto + '://' + location.host + ctx + '/admin/ws?channel=' + channels[0];
+  var hook = typeof window.wsOnUpdate === 'function' ? window.wsOnUpdate : null;
+  var dot = document.getElementById('liveDot');
+
+  function setLive(on) {
+    if (dot) dot.className = 'live-dot' + (on ? ' on' : '');
+  }
+
+  function relevant(data) {
+    return data.indexOf('approved') !== -1 || data.indexOf('refresh') !== -1
+        || data.indexOf('created') !== -1 || data.indexOf('users') !== -1
+        || data.indexOf('catalog') !== -1;
+  }
+
+  function connect() {
+    var ws = new WebSocket(url);
+    ws.onopen = function () { setLive(true); };
+    ws.onmessage = function (ev) {
+      if (!ev.data || !relevant(ev.data)) return;
+      if (hook) {
+        hook(ev.data);            // page refreshes its own data via AJAX
+      } else {
+        ws.close();
+        location.reload();
+      }
+    };
+    ws.onclose = function () {
+      setLive(false);
+      setTimeout(function () {
+        if (document.visibilityState === 'hidden') return;
+        if (hook) {
+          hook('refresh');        // catch up on anything missed, then reconnect
+          connect();
+        } else {
+          location.reload();
+        }
+      }, 3000);
+    };
+  }
+  connect();
+})();
+</script>
+</c:if>
+</body>
+</html>

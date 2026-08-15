@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+	<persistence-unit name="WarehouseManagement" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost;database=WarehouseManagement;trustServerCertificate=true" />
+			<property name="jakarta.persistence.jdbc.user" value="sa" />
+			<property name="jakarta.persistence.jdbc.password" value="221027" />
+
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="WarehouseManagementBV" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://localhost;database=WarehouseManagementBV;trustServerCertificate=true" />
+			<property name="jakarta.persistence.jdbc.user" value="sa" />
+			<property name="jakarta.persistence.jdbc.password" value="221027" />
+
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="WarehouseManagementRemote" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://WarehouseManagement.mssql.somee.com;database=WarehouseManagement;trustServerCertificate=true" />
+			<property name="jakarta.persistence.jdbc.user" value="NhomLVxxx" />
+			<property name="jakarta.persistence.jdbc.password" value="5anhemsieunhan" />
+			
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+	<persistence-unit name="WarehouseManagementRemote1" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:sqlserver://db62918.public.databaseasp.net;database=db62918;trustServerCertificate=true" />
+			<property name="jakarta.persistence.jdbc.user" value="db62918" />
+			<property name="jakarta.persistence.jdbc.password" value="mA#8+2EgeN!3" />
+			
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="false" />
+		</properties>
+	</persistence-unit>
+</persistence>
