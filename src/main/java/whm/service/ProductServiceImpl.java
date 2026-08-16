@@ -39,6 +39,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product findByName(String name) {
+        return dao.findByName(name);
+    }
+
+    @Override
     public void save(Product p) {
         if (p.getProductId() == null)
             dao.create(p);
@@ -53,5 +58,14 @@ public class ProductServiceImpl implements ProductService {
             p.setIsActive(false);
             dao.update(p);
         }
+    }
+    
+    @Override
+    public void activate(Integer id) {
+    	Product p = dao.findById(id);
+		if (p != null) {
+			p.setIsActive(true);
+			dao.update(p);
+		}
     }
 }

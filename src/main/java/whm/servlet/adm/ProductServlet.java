@@ -88,15 +88,27 @@ public class ProductServlet extends HttpServlet {
                 service.deactivate(XParam.getInt(req, "id", -1));
                 XAttr.flashSuccess(req, "Đã ngừng kinh doanh sản phẩm");
                 RealtimeNotifier.notifyCatalogChanged(XAuth.currentUser(req).getFullName());
+            } else if("activate".equals(action)) {
+				service.activate(XParam.getInt(req, "id", -1));
+				XAttr.flashSuccess(req, "Đã mở kinh doanh sản phẩm");
+				RealtimeNotifier.notifyCatalogChanged(XAuth.currentUser(req).getFullName());
+            	
             } else {
                 String name = XParam.getString(req, "productName", "");
+                String unit = XParam.getString(req, "unit", null);
                 Integer categoryId = XParam.getInt(req, "categoryId", null);
                 if (name.isEmpty() || categoryId == null)
                     throw new IllegalStateException("Tên sản phẩm và danh mục là bắt buộc");
+                if (unit == null || unit.isBlank())
+                    throw new IllegalStateException("Đơn vị tính không được để trống");
+                Integer id = XParam.getInt(req, "id", null);
+                Product existing = service.findByName(name);
+                if (existing != null && (id == null || !existing.getProductId().equals(id)))
+                    throw new IllegalStateException("Tên sản phẩm đã tồn tại");
                 Product p = new Product();
-                p.setProductId(XParam.getInt(req, "id", null));
+                p.setProductId(id);
                 p.setProductName(name);
-                p.setUnitOfMeasurement(XParam.getString(req, "unit", null));
+                p.setUnitOfMeasurement(unit);
                 p.setImageUrl(XParam.getString(req, "imageUrl", null));
                 p.setCategory(categoryService.findById(categoryId));
                 p.setMinStock(XParam.getInt(req, "minStock", 0));

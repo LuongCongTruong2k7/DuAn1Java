@@ -19,6 +19,11 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public Category findByName(String name) {
+        return dao.findByName(name);
+    }
+
+    @Override
     public void delete(Integer id) {
         dao.deleteById(id);
     }

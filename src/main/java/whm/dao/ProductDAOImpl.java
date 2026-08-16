@@ -20,6 +20,18 @@ public class ProductDAOImpl extends CrudDAO<Product, Integer> implements Product
     }
 
     @Override
+    public Product findByName(String name) {
+        try (EntityManager em = XJpa.em()) {
+            List<Product> r = em.createQuery(
+                    "FROM Product p WHERE lower(p.productName) = lower(:name)", Product.class)
+                    .setParameter("name", name)
+                    .setMaxResults(1)
+                    .getResultList();
+            return r.isEmpty() ? null : r.get(0);
+        }
+    }
+
+    @Override
     public List<Product> search(String keyword) {
         try (EntityManager em = XJpa.em()) {
             return em.createQuery(

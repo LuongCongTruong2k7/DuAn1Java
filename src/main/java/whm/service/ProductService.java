@@ -16,8 +16,12 @@ public interface ProductService {
 
     Product findById(Integer id);
 
+    Product findByName(String name);
+
     void save(Product p);
 
     /** Soft-delete: mark inactive so history stays intact. */
     void deactivate(Integer id);
+    
+    void activate(Integer id);
 }

@@ -3,45 +3,114 @@
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html class="light" lang="vi">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>${pageTitle} - Quản lý kho</title>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style4.css">
+<%@ include file="_ui_head.jspf" %>
 </head>
-<body>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="brand"><span class="icon"><img src="${pageContext.request.contextPath}/assets/images/qlkho.png"></span><span>QUẢN LÝ KHO</span></div>
-    <nav>
-      <a href="${pageContext.request.contextPath}/dashboard" class="${active=='dashboard'?'on':''}">🏠 Tổng quan</a>
-      <a href="${pageContext.request.contextPath}/admin/receipts" class="${active=='receipts'?'on':''}">📥 Nhập kho</a>
-      <a href="${pageContext.request.contextPath}/admin/issues" class="${active=='issues'?'on':''}">📤 Xuất kho</a>
-      <a href="${pageContext.request.contextPath}/admin/categories" class="${active=='categories'?'on':''}">🗂️ Danh mục</a>
-      <a href="${pageContext.request.contextPath}/admin/products" class="${active=='products'?'on':''}">📋 Sản phẩm</a>
-      <a href="${pageContext.request.contextPath}/admin/reports" class="${active=='reports'?'on':''}">📊 Báo cáo</a>
-      <c:if test="${currentUser.admin}">
-        <a href="${pageContext.request.contextPath}/admin/users" class="${active=='users'?'on':''}">👥 Nhân viên</a>
-      </c:if>
-      <a href="${pageContext.request.contextPath}/account" class="${active=='account'?'on':''}">⚙️ Tài khoản</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="me">${currentUser.fullName}</div>
-      <a class="logout" href="${pageContext.request.contextPath}/logout">⎋ Đăng xuất</a>
-    </div>
-  </aside>
-  <main class="content">
-    <c:set var="displayName" value="${empty currentUser.fullName ? currentUser.username : currentUser.fullName}"/>
-    <div class="topbar">
-      <div class="page-title">${pageTitle}</div>
-      <a href="${pageContext.request.contextPath}/account">
-      <div class="user-chip">
-        <div class="avatar">
-		    <img src="${pageContext.request.contextPath}/assets/images/${currentUser.role.roleId == 1 ? 'manager.png' : 'warehouse.png'}" alt="Avatar">
-		</div>
-        <div class="who"><b>${displayName}</b><span>${currentUser.role.roleName}</span></div>
+<body class="bg-background text-text-primary antialiased">
+<div class="sidebar-backdrop md:hidden" id="sidebarBackdrop"></div>
+<div class="min-h-screen flex">
+  <aside id="sidebar" class="hidden md:flex fixed left-0 top-0 h-full w-[260px] flex-col z-50 bg-inverse-surface text-primary border-r border-border-light shadow-sm py-page-padding-y">
+    <div class="px-6 mb-8 flex items-center space-x-3">
+      <span class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0 overflow-hidden">
+        <a href="${pageContext.request.contextPath}/dashboard">
+        	<img src="https://raw.githubusercontent.com/LuongCongTruong2k7/DuAn1Java/df084467c6cb47edf22c189fde4387920cf775f1/src/main/webapp/assets/images/qlkho.png" alt="" class="w-30 h-30 object-contain">
+        </a>
+      </span>
+      <div>
+      	<a href="${pageContext.request.contextPath}/dashboard">
+        <h1 class="text-headline-lg font-headline-lg text-on-primary">QUẢN LÝ KHO</h1>
+        </a>
       </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-4 space-y-2">
+      <a href="${pageContext.request.contextPath}/dashboard" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='dashboard'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M3 11l9-7 9 7"/><path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10"/></svg>
+        <span class="text-nav-link font-nav-link">Tổng quan</span>
+      </a>
+      <a href="${pageContext.request.contextPath}/admin/receipts" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='receipts'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
+        <span class="text-nav-link font-nav-link">Nhập kho</span>
+      </a>
+      <a href="${pageContext.request.contextPath}/admin/issues" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='issues'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M4 19h16"/></svg>
+        <span class="text-nav-link font-nav-link">Xuất kho</span>
+      </a>
+      <a href="${pageContext.request.contextPath}/admin/categories" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='categories'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M20 12.3 12.7 5H5v7.7L12.3 20a2 2 0 0 0 2.8 0l5-5a2 2 0 0 0 0-2.8Z"/><circle cx="9" cy="9" r="1.4" fill="currentColor" stroke="none"/></svg>
+        <span class="text-nav-link font-nav-link">Danh mục</span>
+      </a>
+      <a href="${pageContext.request.contextPath}/admin/products" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='products'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg>
+        <span class="text-nav-link font-nav-link">Sản phẩm</span>
+      </a>
+      <a href="${pageContext.request.contextPath}/admin/reports" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='reports'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><path d="M4 19V5"/><path d="M9 19v-7"/><path d="M14 19v-11"/><path d="M19 19V9"/></svg>
+        <span class="text-nav-link font-nav-link">Báo cáo</span>
+      </a>
+      <c:if test="${currentUser.admin}">
+        <a href="${pageContext.request.contextPath}/admin/users" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='users'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="9" cy="8" r="3.2"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16.5 6.5a3.2 3.2 0 0 1 0 6.3"/><path d="M18.5 14a6 6 0 0 1 4 5.6"/></svg>
+          <span class="text-nav-link font-nav-link">Nhân viên</span>
+        </a>
+      </c:if>
+      <a href="${pageContext.request.contextPath}/account" class="flex items-center space-x-3 px-3 py-2 rounded-lg ${active=='account'?'text-on-primary font-nav-link-active border-l-[3px] border-surface-tint bg-white/10 opacity-90 scale-[0.99] transition-all duration-150 ease-in-out':'text-secondary-fixed-dim font-nav-link hover:text-on-primary hover:bg-white/5 hover:translate-x-1 transition-all duration-150 ease-in-out'}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.04 1.56V21a2 2 0 1 1-4 0v-.09A1.7 1.7 0 0 0 9 19.36a1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.64 15a1.7 1.7 0 0 0-1.56-1.04H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.64a1.7 1.7 0 0 0 1.04-1.56V3a2 2 0 1 1 4 0v.09A1.7 1.7 0 0 0 15 4.64a1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.36 9c.14.62.7 1.04 1.56 1.04H21a2 2 0 1 1 0 4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg>
+        <span class="text-nav-link font-nav-link">Tài khoản</span>
+      </a>
+    </nav>
+    <div class="px-6 mt-auto space-y-3">
+      <div class="flex items-center space-x-3">
+        <img src="${currentUser.role.roleId == 1
+          ? 'https://raw.githubusercontent.com/LuongCongTruong2k7/DuAn1Java/df084467c6cb47edf22c189fde4387920cf775f1/src/main/webapp/assets/images/manager.png'
+          : 'https://raw.githubusercontent.com/LuongCongTruong2k7/DuAn1Java/df084467c6cb47edf22c189fde4387920cf775f1/src/main/webapp/assets/images/warehouse.png'}"
+          alt="Avatar" class="w-10 h-10 rounded-full border border-border-light object-cover">
+        <div>
+          <p class="text-body-main font-body-main font-semibold text-on-primary">${currentUser.fullName}</p>
+          <p class="text-caption font-caption text-secondary-fixed-dim">${currentUser.role.roleName}</p>
+        </div>
+      </div>
+      <a href="${pageContext.request.contextPath}/logout" class="flex items-center space-x-2 px-3 py-2 rounded-lg text-danger hover:bg-white/5 transition-colors text-body-main font-body-main">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>Đăng xuất</span>
       </a>
     </div>
-    <c:if test="${not empty flashSuccess}"><div class="alert ok">✓ ${flashSuccess}</div></c:if>
-    <c:if test="${not empty flashError}"><div class="alert err">✕ ${flashError}</div></c:if>
+  </aside>
+  <main class="flex-1 md:ml-[260px] min-h-screen flex flex-col bg-surface">
+    <c:set var="displayName" value="${empty currentUser.fullName ? currentUser.username : currentUser.fullName}"/>
+    <header class="flex items-center justify-between h-16 px-page-padding-x sticky top-0 z-40 bg-white border-b border-border-light shadow-sm shrink-0">
+      <div class="flex items-center space-x-4">
+        <button type="button" id="menuToggle" aria-label="Mở menu"
+          class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg border border-border-light bg-white cursor-pointer hover:bg-surface-container-low transition-colors">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="w-5 h-5"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>
+        </button>
+        <h2 class="text-section-header font-section-header text-on-surface">${pageTitle}</h2>
+        <c:if test="${wsChannels ne null}"><span class="live-dot" id="liveDot" title="Kết nối thời gian thực"></span></c:if>
+      </div>
+      <a href="${pageContext.request.contextPath}/account" class="flex items-center space-x-3 px-2 py-1 rounded-full hover:bg-surface-container-low transition-colors">
+        <img src="${currentUser.role.roleId == 1
+          ? 'https://raw.githubusercontent.com/LuongCongTruong2k7/DuAn1Java/df084467c6cb47edf22c189fde4387920cf775f1/src/main/webapp/assets/images/manager.png'
+          : 'https://raw.githubusercontent.com/LuongCongTruong2k7/DuAn1Java/df084467c6cb47edf22c189fde4387920cf775f1/src/main/webapp/assets/images/warehouse.png'}"
+          alt="Avatar" class="w-8 h-8 rounded-full border border-border-light object-cover shrink-0">
+        <div class="hidden sm:block mr-1">
+          <b class="block text-body-main font-body-main font-semibold text-on-surface leading-tight">${displayName}</b>
+          <span class="text-caption font-caption text-secondary leading-tight">${currentUser.role.roleName}</span>
+        </div>
+      </a>
+    </header>
+    <div class="px-page-padding-x pt-3">
+      <c:if test="${not empty flashSuccess}">
+        <div class="flex items-center gap-2 px-4 py-3 rounded-lg bg-success-soft text-success border border-success/20 mb-2 text-body-main font-body-main">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0"><path d="M20 6 9 17l-5-5"/></svg>
+          ${flashSuccess}
+        </div>
+      </c:if>
+      <c:if test="${not empty flashError}">
+        <div class="flex items-center gap-2 px-4 py-3 rounded-lg bg-danger-soft text-danger border border-danger/20 mb-2 text-body-main font-body-main">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 shrink-0"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+          ${flashError}
+        </div>
+      </c:if>
+    </div>

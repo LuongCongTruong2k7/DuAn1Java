@@ -35,8 +35,11 @@ public class ReceiptServlet extends HttpServlet {
         try {
             switch (action) {
                 case "create" -> {
+                    String supplierName = XParam.getString(req, "supplierName", "");
+                    if (supplierName.isEmpty())
+                        throw new IllegalStateException("Tên nhà cung cấp không được để trống");
                     var r = service.create(
-                            XParam.getString(req, "supplierName", ""),
+                            supplierName,
                             XParam.getString(req, "remarks", null),
                             XAuth.currentUser(req).getUserId());
                     XAttr.flashSuccess(req, "Đã tạo phiếu nhập #" + r.getReceiptId());

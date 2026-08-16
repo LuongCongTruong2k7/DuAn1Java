@@ -35,8 +35,11 @@ public class IssueServlet extends HttpServlet {
         try {
             switch (action) {
                 case "create" -> {
+                    String recipient = XParam.getString(req, "recipient", "");
+                    if (recipient.isEmpty())
+                        throw new IllegalStateException("Tên người nhận không được để trống");
                     var i = service.create(
-                            XParam.getString(req, "recipient", ""),
+                            recipient,
                             XParam.getString(req, "remarks", null),
                             XAuth.currentUser(req).getUserId());
                     XAttr.flashSuccess(req, "Đã tạo phiếu xuất #" + i.getIssueId());

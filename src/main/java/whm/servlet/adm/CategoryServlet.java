@@ -45,6 +45,9 @@ public class CategoryServlet extends HttpServlet {
                     Category c = new Category();
                     c.setCategoryId(XParam.getInt(req, "id", null));
                     c.setCategoryName(name);
+                    if (service.findByName(name) != null
+                            && !service.findByName(name).getCategoryId().equals(c.getCategoryId()))
+                        throw new IllegalStateException("Tên danh mục đã tồn tại");
                     service.save(c);
                     XAttr.flashSuccess(req, "Đã lưu danh mục");
                     RealtimeNotifier.notifyCatalogChanged(XAuth.currentUser(req).getFullName());
